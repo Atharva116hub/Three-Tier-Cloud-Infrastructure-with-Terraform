@@ -17,19 +17,19 @@ module "sg" {
 }
 
 module "ec2" {
-    source  = "./modules/ec2"
-    subnet_id = module.vpc.public_subnets[0]
-    vpc_security_groups = [module.sg.security_group_id]
-    key_name = var.key_name 
-    instance_type = var.instance_type 
+  source              = "./modules/ec2"
+  subnet_id           = module.vpc.public_subnets[0]
+  vpc_security_groups = [module.sg.web_sg_id]
+  instance_type       = var.instance_type
+  key_name            = var.key_name
 }
 
 module "rds" {
-    source = "./modules/rds"
-    private_subnets = module.vpc.private_subnets
-    vpc_security_groups = [module.sg.security_group_id]
-  
+  source              = "./modules/rds"
+  private_subnets     = module.vpc.private_subnets
+  vpc_security_groups = [module.sg.db_sg_id]
 }
+
 
 module "alb" {
     source = "./modules/alb"
